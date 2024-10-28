@@ -27,7 +27,7 @@ import 'package:proxypin/network/components/rewrite/request_rewrite_manager.dart
 import 'package:proxypin/network/components/rewrite/rewrite_rule.dart';
 import 'package:proxypin/network/components/script_manager.dart';
 import 'package:proxypin/network/http/http.dart';
-import 'package:proxypin/network/util/lists.dart';
+import 'package:proxypin/network/util/lang.dart';
 import 'package:proxypin/network/util/logger.dart';
 import 'package:proxypin/ui/component/cert_hash.dart';
 import 'package:proxypin/ui/component/device.dart';
