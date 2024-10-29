@@ -15,7 +15,7 @@
  */
 import 'dart:convert';
 
-import 'package:file_selector/file_selector.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
@@ -118,11 +118,11 @@ class _MobileScriptState extends State<MobileScript> {
 
   //导入js
   import() async {
-    final XFile? file = await openFile();
-    if (file == null) {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['json']);
+    if (result == null || result.files.isEmpty) {
       return;
     }
-
+    var file = result.files.single.xFile;
     try {
       var scriptManager = (await ScriptManager.instance);
       var json = jsonDecode(utf8.decode(await file.readAsBytes()));
