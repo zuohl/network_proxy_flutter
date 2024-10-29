@@ -470,7 +470,11 @@ class _ScriptEditState extends State<ScriptEdit> {
                     CodeTheme(
                         data: CodeThemeData(styles: monokaiSublimeTheme),
                         child: SingleChildScrollView(
-                            child: CodeField(textStyle: const TextStyle(fontSize: 14), controller: script)))
+                            child: CodeField(
+                                textStyle: const TextStyle(fontSize: 13),
+                                enableSuggestions: true,
+                                onTapOutside: (event) => FocusScope.of(context).unfocus(),
+                                controller: script)))
                   ],
                 ))));
   }
