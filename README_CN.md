@@ -1,6 +1,6 @@
 # ProxyPin
 
-[English](README) | 中文
+[English](README.md) | 中文
 ## 开源免费抓包工具，支持Windows、Mac、Android、IOS、Linux 全平台系统
 
 您可以使用它来拦截、检查和重写HTTP（S）流量，支持Flutter应用抓包，ProxyPin基于Flutter开发，UI美观易用。
