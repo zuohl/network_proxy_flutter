@@ -23,11 +23,14 @@ class AppInfo {
   //icon
   Uint8List? icon;
 
+  bool? inValid;
+
   AppInfo({
     this.name,
     this.packageName,
     this.versionName,
     this.icon,
+    this.inValid,
   });
 
   AppInfo.formJson(Map<dynamic, dynamic> json) {

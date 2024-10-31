@@ -65,7 +65,7 @@ class _AppWhitelistState extends State<AppWhitelist> {
     var appWhitelist = <Future<AppInfo>>[];
     for (var element in configuration.appWhitelist) {
       appWhitelist.add(InstalledApps.getAppInfo(element).catchError((e) {
-        return AppInfo(name: isCN ? "未知应用" : "Unknown app", packageName: element);
+        return AppInfo(name: isCN ? "未知应用" : "Unknown app", packageName: element, inValid: true);
       }));
     }
 
@@ -94,6 +94,22 @@ class _AppWhitelistState extends State<AppWhitelist> {
                   });
                 }
               },
+            ),
+            IconButton(
+              tooltip: isCN ? '清除失效应用' : 'clear invalid apps',
+              onPressed: () async {
+                if (configuration.appWhitelist.isEmpty) return;
+                List<AppInfo> list = await Future.wait(appWhitelist);
+                for (AppInfo appInfo in list) {
+                  if (appInfo.inValid == true) {
+                    configuration.appWhitelist.remove(appInfo.packageName);
+                  }
+                }
+                setState(() {
+                  changed = true;
+                });
+              },
+              icon: Icon(Icons.cleaning_services_outlined),
             ),
           ],
         ),
@@ -196,7 +212,7 @@ class _AppBlacklistState extends State<AppBlacklist> {
     var appBlacklist = <Future<AppInfo>>[];
     for (var element in configuration.appBlacklist ?? []) {
       appBlacklist.add(InstalledApps.getAppInfo(element).catchError((e) {
-        return AppInfo(name: isCN ? "未知应用" : "Unknown app", packageName: element);
+        return AppInfo(name: isCN ? "未知应用" : "Unknown app", packageName: element, inValid: true);
       }));
     }
 
@@ -226,6 +242,22 @@ class _AppBlacklistState extends State<AppBlacklist> {
                 });
               }
             },
+          ),
+          IconButton(
+            tooltip: isCN ? '清除失效应用' : 'clear invalid apps',
+            onPressed: () async {
+              if (configuration.appBlacklist?.isEmpty == true) return;
+              List<AppInfo> list = await Future.wait(appBlacklist);
+              for (AppInfo appInfo in list) {
+                if (appInfo.inValid == true) {
+                  configuration.appBlacklist?.remove(appInfo.packageName);
+                }
+              }
+              setState(() {
+                changed = true;
+              });
+            },
+            icon: Icon(Icons.cleaning_services_outlined),
           ),
         ],
       ),
