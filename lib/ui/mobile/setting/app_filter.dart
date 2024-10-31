@@ -75,21 +75,24 @@ class _AppWhitelistState extends State<AppWhitelist> {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () {
+              onPressed: () async {
                 //添加
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => const InstalledAppsWidget()))
-                    .then((value) {
-                  if (value != null) {
-                    if (configuration.appWhitelist.contains(value)) {
-                      return;
+                List<AppInfo> list = await Future.wait(appWhitelist);
+                if (context.mounted) {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return InstalledAppsWidget(addedList: list);
+                  })).then((value) {
+                    if (value != null) {
+                      if (configuration.appWhitelist.contains(value)) {
+                        return;
+                      }
+                      setState(() {
+                        configuration.appWhitelist.add(value);
+                        changed = true;
+                      });
                     }
-                    setState(() {
-                      configuration.appWhitelist.add(value);
-                      changed = true;
-                    });
-                  }
-                });
+                  });
+                }
               },
             ),
           ],
@@ -203,22 +206,25 @@ class _AppBlacklistState extends State<AppBlacklist> {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
+            onPressed: () async {
               //添加
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const InstalledAppsWidget()))
-                  .then((value) {
-                if (value != null) {
-                  if (configuration.appBlacklist?.contains(value) == true) {
-                    return;
+              List<AppInfo> list = await Future.wait(appBlacklist);
+              if (context.mounted) {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => InstalledAppsWidget(addedList: list)))
+                    .then((value) {
+                  if (value != null) {
+                    if (configuration.appBlacklist?.contains(value) == true) {
+                      return;
+                    }
+                    setState(() {
+                      configuration.appBlacklist ??= [];
+                      configuration.appBlacklist?.add(value);
+                      changed = true;
+                    });
                   }
-                  setState(() {
-                    configuration.appBlacklist ??= [];
-                    configuration.appBlacklist?.add(value);
-                    changed = true;
-                  });
-                }
-              });
+                });
+              }
             },
           ),
         ],
@@ -267,7 +273,12 @@ class _AppBlacklistState extends State<AppBlacklist> {
 
 ///已安装的app列表
 class InstalledAppsWidget extends StatefulWidget {
-  const InstalledAppsWidget({super.key});
+  const InstalledAppsWidget({
+    super.key,
+    required this.addedList,
+  });
+
+  final List<AppInfo> addedList;
 
   @override
   State<InstalledAppsWidget> createState() => _InstalledAppsWidgetState();
@@ -306,6 +317,7 @@ class _InstalledAppsWidgetState extends State<InstalledAppsWidget> {
           builder: (BuildContext context, AsyncSnapshot<List<AppInfo>> snapshot) {
             if (snapshot.hasData) {
               List<AppInfo> appInfoList = snapshot.data!;
+              appInfoList = appInfoList.toSet().difference(widget.addedList.toSet()).toList();
               if (keyword != null && keyword!.trim().isNotEmpty) {
                 appInfoList = appInfoList
                     .where((element) =>
