@@ -33,7 +33,6 @@ import 'package:proxypin/network/http/websocket.dart';
 import 'package:proxypin/network/http_client.dart';
 import 'package:proxypin/ui/component/memory_cleanup.dart';
 import 'package:proxypin/ui/component/toolbox.dart';
-import 'package:proxypin/ui/component/widgets.dart';
 import 'package:proxypin/ui/configuration.dart';
 import 'package:proxypin/ui/content/panel.dart';
 import 'package:proxypin/ui/launch/launch.dart';
@@ -184,7 +183,7 @@ class MobileHomeState extends State<MobileHomePage> implements EventListener, Li
         child: ValueListenableBuilder<int>(
             valueListenable: _selectIndex,
             builder: (context, index, child) => Scaffold(
-                body: LazyIndexedStack(index: index, children: navigationView),
+                body: IndexedStack(index: index, children: navigationView),
                 bottomNavigationBar: widget.appConfiguration.bottomNavigation
                     ? Container(
                         constraints: const BoxConstraints(maxHeight: 80),

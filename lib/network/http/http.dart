@@ -143,9 +143,15 @@ class HttpRequest extends HttpMessage {
   String get requestUrl => HostAndPort.startsWithScheme(uri) ? uri : '${remoteDomain()}$uri';
 
   /// 请求的uri
+  Uri? _requestUri;
+
   Uri? get requestUri {
+    if (_requestUri != null && _requestUri.toString() == requestUrl) {
+      return _requestUri;
+    }
     try {
-      return Uri.parse(requestUrl);
+      _requestUri ??= Uri.parse(requestUrl);
+      return _requestUri;
     } catch (e) {
       return null;
     }
@@ -155,22 +161,12 @@ class HttpRequest extends HttpMessage {
   String get domainPath => '${remoteDomain()}$path';
 
   /// 请求的path
-  String get path {
-    try {
-      var requestPath = Uri.parse(requestUrl).path;
-      return requestPath.isEmpty ? "" : requestPath;
-    } catch (e) {
-      return "/";
-    }
-  }
+  String get path => requestUri?.path ?? '';
 
-  Map<String, String> get queries {
-    try {
-      return Uri.parse(requestUrl).queryParameters;
-    } catch (e) {
-      return {};
-    }
-  }
+  /// path and query
+  String get pathAndQuery => '${requestUri?.path}${requestUri?.hasQuery == true ? '?${requestUri?.query}' : ''}';
+
+  Map<String, String> get queries => requestUri?.queryParameters ?? {};
 
   ///获取消息体编码
   @override
@@ -215,7 +211,7 @@ class HttpRequest extends HttpMessage {
 
   @override
   String toString() {
-    return 'HttpRequest{version: $protocolVersion, url: $uri, method: ${method.name}, headers: $headers, contentLength: $contentLength, bodyLength: ${body?.length}}';
+    return 'HttpRequest{version: $protocolVersion, uri: $uri, method: ${method.name}, headers: $headers, contentLength: $contentLength, bodyLength: ${body?.length}}';
   }
 }
 
