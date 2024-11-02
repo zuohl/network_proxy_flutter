@@ -26,6 +26,7 @@ import 'package:flutter_toastr/flutter_toastr.dart';
 import 'package:proxypin/network/bin/configuration.dart';
 import 'package:proxypin/network/util/logger.dart';
 import 'package:proxypin/ui/component/utils.dart';
+import 'package:proxypin/utils/platform.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../network/components/host_filter.dart';
@@ -136,7 +137,8 @@ class _DomainFilterState extends State<DomainFilter> {
 
   //导入
   import() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['config', 'json']);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['config', 'json']);
     if (result == null || result.files.isEmpty) {
       return;
     }
@@ -435,8 +437,15 @@ class _DomainListState extends State<DomainList> {
       list.add(rule);
     }
 
+    RenderBox? box;
+    if (await Platforms.isIpad() && mounted) {
+      box = context.findRenderObject() as RenderBox?;
+    }
+
     final XFile file = XFile.fromData(utf8.encode(jsonEncode(list)), mimeType: 'config');
-    await Share.shareXFiles([file], fileNameOverrides: [fileName]);
+    await Share.shareXFiles([file],
+        fileNameOverrides: [fileName],
+        sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size);
   }
 
   //删除

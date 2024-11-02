@@ -29,6 +29,7 @@ import 'package:proxypin/ui/component/utils.dart';
 import 'package:proxypin/ui/component/widgets.dart';
 import 'package:proxypin/ui/mobile/widgets/floating_window.dart';
 import 'package:proxypin/utils/lang.dart';
+import 'package:proxypin/utils/platform.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -562,7 +563,7 @@ class _ScriptListState extends State<ScriptList> {
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     TextButton.icon(
                         onPressed: () {
-                          export(selected.toList());
+                          export(context, selected.toList());
                           setState(() {
                             selected.clear();
                             multiple = false;
@@ -658,7 +659,7 @@ class _ScriptListState extends State<ScriptList> {
               const Divider(thickness: 0.5, height: 1),
               BottomSheetItem(text: localizations.edit, onPressed: () => showEdit(index)),
               const Divider(thickness: 0.5, height: 1),
-              BottomSheetItem(text: localizations.share, onPressed: () => export([index])),
+              BottomSheetItem(text: localizations.share, onPressed: () => export(context, [index])),
               const Divider(thickness: 0.5, height: 1),
               BottomSheetItem(
                   text: widget.scripts[index].enabled ? localizations.disabled : localizations.enable,
@@ -713,7 +714,7 @@ class _ScriptListState extends State<ScriptList> {
   }
 
   //导出js
-  export(List<int> indexes) async {
+  export(BuildContext context, List<int> indexes) async {
     if (indexes.isEmpty) return;
     //文件名称
     String fileName = 'proxypin-scripts.json';
@@ -727,8 +728,13 @@ class _ScriptListState extends State<ScriptList> {
       json.add(map);
     }
 
+    RenderBox? box;
+    if (await Platforms.isIpad() && context.mounted) {
+      box = context.findRenderObject() as RenderBox?;
+    }
+
     final XFile file = XFile.fromData(utf8.encode(jsonEncode(json)), mimeType: 'json');
-    Share.shareXFiles([file], fileNameOverrides: [fileName]);
+    Share.shareXFiles([file], fileNameOverrides: [fileName], sharePositionOrigin: box?.paintBounds);
   }
 
   enableStatus(bool enable) {
