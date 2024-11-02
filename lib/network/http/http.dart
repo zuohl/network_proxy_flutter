@@ -116,8 +116,8 @@ abstract class HttpMessage {
 
 ///HTTP请求。
 class HttpRequest extends HttpMessage {
-  String uri;
-  late HttpMethod method;
+  String _uri;
+  HttpMethod method;
 
   HostAndPort? hostAndPort;
   DateTime requestTime = DateTime.now(); //请求时间
@@ -125,7 +125,14 @@ class HttpRequest extends HttpMessage {
   Map<String, dynamic> attributes = {};
   ProcessInfo? processInfo;
 
-  HttpRequest(this.method, this.uri, {String protocolVersion = "HTTP/1.1"}) : super(protocolVersion);
+  String get uri => _uri;
+
+  set uri(String uri) {
+    _uri = uri;
+    _requestUri = null;
+  }
+
+  HttpRequest(this.method, this._uri, {String protocolVersion = "HTTP/1.1"}) : super(protocolVersion);
 
   String? remoteDomain() {
     if (hostAndPort == null && HostAndPort.startsWithScheme(uri)) {
@@ -146,9 +153,6 @@ class HttpRequest extends HttpMessage {
   Uri? _requestUri;
 
   Uri? get requestUri {
-    if (_requestUri != null && _requestUri.toString() == requestUrl) {
-      return _requestUri;
-    }
     try {
       _requestUri ??= Uri.parse(requestUrl);
       return _requestUri;
