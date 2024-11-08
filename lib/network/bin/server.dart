@@ -19,6 +19,7 @@ import 'dart:io';
 
 import 'package:proxypin/network/bin/configuration.dart';
 import 'package:proxypin/network/channel.dart';
+import 'package:proxypin/network/components/hosts.dart';
 import 'package:proxypin/network/components/interceptor.dart';
 import 'package:proxypin/network/components/request_block.dart';
 import 'package:proxypin/network/components/request_rewrite.dart';
@@ -78,6 +79,7 @@ class ProxyServer {
     Server server = Server(configuration, listener: CombinedEventListener(listeners));
 
     List<Interceptor> interceptors = [
+      Hosts(),
       RequestRewriteInterceptor.instance,
       ScriptInterceptor(),
       RequestBlockInterceptor(),

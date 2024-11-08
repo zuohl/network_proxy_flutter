@@ -206,7 +206,12 @@ class HttpProxyChannelHandler extends ChannelHandler<HttpRequest> {
       return proxyChannel;
     }
 
-    final proxyChannel = await connectRemote(channelContext, clientChannel, hostAndPort);
+    HostAndPort remoteAddress = hostAndPort;
+    for (var interceptor in interceptors) {
+      remoteAddress = await interceptor.preConnect(hostAndPort);
+    }
+
+    final proxyChannel = await connectRemote(channelContext, clientChannel, remoteAddress);
     if (clientChannel.isSsl) {
       await proxyChannel.secureSocket(channelContext, host: hostAndPort.host);
     }

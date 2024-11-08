@@ -1,3 +1,4 @@
+import 'package:proxypin/network/host_port.dart';
 import 'package:proxypin/network/http/http.dart';
 
 /// A Interceptor that can intercept and modify the request and response.
@@ -5,6 +6,10 @@ import 'package:proxypin/network/http/http.dart';
 abstract class Interceptor {
   /// The priority of the interceptor.
   int get priority => 0;
+
+  Future<HostAndPort> preConnect(HostAndPort hostAndPort) async {
+    return hostAndPort;
+  }
 
   /// Called before the request is sent to the server.
   Future<HttpRequest?> onRequest(HttpRequest request) async {

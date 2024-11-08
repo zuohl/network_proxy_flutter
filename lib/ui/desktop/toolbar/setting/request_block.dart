@@ -83,15 +83,13 @@ class _RequestBlockState extends State<RequestBlock> {
                   decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.2))),
                   child: Column(children: [
                     const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Container(width: 15),
-                        const Expanded(child: Text('URL', style: TextStyle(fontSize: 14))),
-                        SizedBox(width: 80, child: Text(localizations.enable, style: const TextStyle(fontSize: 14))),
-                        Container(width: 18),
-                        SizedBox(width: 120, child: Text(localizations.action, style: const TextStyle(fontSize: 14))),
-                      ],
-                    ),
+                    Row(children: [
+                      Container(width: 15),
+                      const Expanded(child: Text('URL', style: TextStyle(fontSize: 14))),
+                      SizedBox(width: 80, child: Text(localizations.enable, style: const TextStyle(fontSize: 14))),
+                      Container(width: 18),
+                      SizedBox(width: 120, child: Text(localizations.action, style: const TextStyle(fontSize: 14))),
+                    ]),
                     const Divider(thickness: 0.5),
                     Expanded(
                         child: ListView.builder(

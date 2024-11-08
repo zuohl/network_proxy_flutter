@@ -91,21 +91,21 @@ class DrawerWidget extends StatelessWidget {
                 leading: const Icon(Icons.filter_alt_outlined),
                 onTap: () => navigator(context, FilterMenu(proxyServer: proxyServer))),
             ListTile(
-                title: Text(localizations.requestRewrite),
-                leading: const Icon(Icons.edit_outlined),
-                onTap: () async {
-                  var requestRewrites = await RequestRewriteManager.instance;
-                  if (context.mounted) {
-                    navigator(context, MobileRequestRewrite(requestRewrites: requestRewrites));
-                  }
-                }),
-            ListTile(
                 title: Text(localizations.requestBlock),
                 leading: const Icon(Icons.block_flipped),
                 onTap: () async {
                   var requestBlockManager = await RequestBlockManager.instance;
                   if (context.mounted) {
                     navigator(context, MobileRequestBlock(requestBlockManager: requestBlockManager));
+                  }
+                }),
+            ListTile(
+                title: Text(localizations.requestRewrite),
+                leading: const Icon(Icons.edit_outlined),
+                onTap: () async {
+                  var requestRewrites = await RequestRewriteManager.instance;
+                  if (context.mounted) {
+                    navigator(context, MobileRequestRewrite(requestRewrites: requestRewrites));
                   }
                 }),
             ListTile(

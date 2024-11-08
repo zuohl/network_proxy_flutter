@@ -132,6 +132,7 @@ async function onResponse(context, request, response) {
     List<ScriptItem> scripts = [];
     var file = await _path;
     logger.d("reloadScript ${file.path}");
+
     if (await file.exists()) {
       var content = await file.readAsString();
       if (content.isEmpty) {
