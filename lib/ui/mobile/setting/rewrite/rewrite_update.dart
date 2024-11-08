@@ -239,8 +239,8 @@ class _RewriteUpdateAddState extends State<RewriteUpdateEdit> {
 
     if (rewriteType == RewriteType.updateBody) {
       dataController.text = (widget.ruleType == RuleType.requestUpdate
-              ? widget.request?.bodyAsString
-              : widget.request?.response?.bodyAsString) ??
+              ? widget.request?.getBodyString()
+              : widget.request?.response?.getBodyString()) ??
           '';
       return;
     }

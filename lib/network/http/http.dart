@@ -90,10 +90,17 @@ abstract class HttpMessage {
     return mediaType.charset ?? MediaType.defaultCharset(mediaType);
   }
 
+  ///获取消息
   String get bodyAsString {
+    return getBodyString(charset: 'utf-8');
+  }
+
+  String getBodyString({String? charset}) {
     if (body == null || body?.isEmpty == true) {
       return "";
     }
+
+    charset ??= this.charset;
     try {
       List<int> rawBody = body!;
       if (headers.contentEncoding == 'br') {

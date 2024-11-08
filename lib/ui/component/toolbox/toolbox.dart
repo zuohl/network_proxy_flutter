@@ -121,7 +121,7 @@ class _ToolboxState extends State<Toolbox> {
                       return;
                     }
 
-                    MultiWindow.openWindow(localizations.timestamp, 'TimestampPage', size: const Size(650, 330));
+                    MultiWindow.openWindow(localizations.timestamp, 'TimestampPage', size: const Size(700, 350));
                   },
                   icon: Icons.av_timer,
                   text: localizations.timestamp),

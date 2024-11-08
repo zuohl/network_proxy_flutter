@@ -325,14 +325,14 @@ async function onResponse(context, request, response) {
       'queries': requestUri?.queryParameters,
       'headers': request.headers.toMap(),
       'method': request.method.name,
-      'body': request.bodyAsString,
+      'body': request.getBodyString(),
       'rawBody': request.body
     };
   }
 
   //转换js response
   Map<String, dynamic> convertJsResponse(HttpResponse response) {
-    dynamic body = response.bodyAsString;
+    dynamic body = response.getBodyString();
     if (response.contentType.isBinary) {
       body = response.body;
     }
