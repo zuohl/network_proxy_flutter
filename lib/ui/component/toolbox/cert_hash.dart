@@ -98,7 +98,7 @@ class _CertHashPageState extends State<CertHashPage> {
                   decoration: decoration(context, label: localizations.inputContent))),
           Align(
               alignment: Alignment.bottomLeft,
-              child: TextButton(onPressed: () {}, child: const Text("Output:", style: TextStyle(fontSize: 16)))),
+              child: TextButton(onPressed: () {}, child:  Text("${localizations.output}:", style: TextStyle(fontSize: 16)))),
           Container(
               width: double.infinity,
               padding: const EdgeInsets.all(10),

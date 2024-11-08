@@ -304,5 +304,10 @@
   "saveImage": "Save Image",
   "selectImage": "Select Image",
   "inputContent": "Input Content",
-  "errorCorrectLevel": "Error Correct"
+  "errorCorrectLevel": "Error Correct",
+  "output": "Output",
+  "timestamp": "Timestamp",
+  "convert": "Convert",
+  "time": "DateTime",
+  "nowTimestamp": "Now timestamp"
 }

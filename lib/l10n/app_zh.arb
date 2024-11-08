@@ -303,5 +303,10 @@
   "saveImage": "保存图片",
   "selectImage": "选择图片",
   "inputContent": "输入内容",
-  "errorCorrectLevel": "纠错等级"
+  "errorCorrectLevel": "纠错等级",
+  "output": "输出",
+  "timestamp": "时间戳",
+  "convert": "转换",
+  "time": "时间",
+  "nowTimestamp": "当前时间戳(秒)"
 }

@@ -23,7 +23,7 @@ import 'package:proxypin/network/handler.dart';
 import 'package:proxypin/network/http/http.dart';
 import 'package:proxypin/network/http/websocket.dart';
 import 'package:proxypin/ui/component/memory_cleanup.dart';
-import 'package:proxypin/ui/component/toolbox.dart';
+import 'package:proxypin/ui/component/toolbox/toolbox.dart';
 import 'package:proxypin/ui/component/widgets.dart';
 import 'package:proxypin/ui/configuration.dart';
 import 'package:proxypin/ui/content/panel.dart';
