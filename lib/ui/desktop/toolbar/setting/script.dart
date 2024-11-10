@@ -441,7 +441,8 @@ class ScriptList extends StatefulWidget {
 
 class _ScriptListState extends State<ScriptList> {
   Set<int> selected = {};
-  bool isPress = false;
+  bool isPressed = false;
+  Offset? lastPressPosition;
 
   AppLocalizations get localizations => AppLocalizations.of(context)!;
 
@@ -461,8 +462,13 @@ class _ScriptListState extends State<ScriptList> {
           });
         },
         child: Listener(
-            onPointerUp: (details) => isPress = false,
-            onPointerDown: (details) => isPress = true,
+            onPointerUp: (event) => isPressed = false,
+            onPointerDown: (event) {
+              lastPressPosition = event.localPosition;
+              if (event.buttons == kPrimaryMouseButton) {
+                isPressed = true;
+              }
+            },
             child: Container(
                 padding: const EdgeInsets.only(top: 10),
                 height: 530,
@@ -495,7 +501,7 @@ class _ScriptListState extends State<ScriptList> {
           onDoubleTap: () => showEdit(index),
           onSecondaryTapDown: (details) => showMenus(details, index),
           onHover: (hover) {
-            if (isPress && !selected.contains(index)) {
+            if (isPressed && !selected.contains(index)) {
               setState(() {
                 selected.add(index);
               });
@@ -519,7 +525,7 @@ class _ScriptListState extends State<ScriptList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 30,
               padding: const EdgeInsets.all(5),

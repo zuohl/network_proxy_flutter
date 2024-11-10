@@ -22,15 +22,17 @@ import 'interceptor.dart';
 /// Hosts interceptor
 /// @author wanghongen
 class Hosts extends Interceptor {
+  Future<HostsManager> get hostsManager async => await HostsManager.instance;
+
   @override
   int get priority => -1000;
 
   @override
   Future<HostAndPort> preConnect(HostAndPort hostAndPort) async {
     var host = hostAndPort.host;
-    var hostsItem = await HostsManager.instance.getHosts(host);
+    var hostsItem = await hostsManager.then((it) => it.getHosts(host));
     if (hostsItem != null) {
-      return hostAndPort.copyWith(host: hostsItem.mappingAddress);
+      return hostAndPort.copyWith(host: hostsItem.toAddress);
     }
     return hostAndPort;
   }

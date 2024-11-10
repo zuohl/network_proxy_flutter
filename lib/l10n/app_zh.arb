@@ -101,6 +101,7 @@
   "matchRule": "匹配规则",
   "emptyMatchAll": "为空表示匹配全部",
   "newBuilt": "新建",
+  "newFolder": "新建文件夹",
   "enableSelect": "启用选择",
   "disableSelect": "禁用选择",
   "deleteSelect": "删除选择",
@@ -308,5 +309,7 @@
   "timestamp": "时间戳",
   "convert": "转换",
   "time": "时间",
-  "nowTimestamp": "当前时间戳(秒)"
+  "nowTimestamp": "当前时间戳(秒)",
+  "hosts": "Hosts 映射",
+  "toAddress": "映射地址"
 }

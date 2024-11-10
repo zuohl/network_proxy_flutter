@@ -101,6 +101,7 @@
   "matchRule": "Match Rule",
   "emptyMatchAll": "Empty means match all",
   "newBuilt": "New",
+  "newFolder": "New Folder",
   "enableSelect": "Enable Select",
   "disableSelect": "Disable Select",
   "deleteSelect": "Delete Select",
@@ -309,5 +310,7 @@
   "timestamp": "Timestamp",
   "convert": "Convert",
   "time": "DateTime",
-  "nowTimestamp": "Now timestamp"
+  "nowTimestamp": "Now timestamp",
+  "hosts": "Hosts",
+  "toAddress": "To Address"
 }

@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -57,8 +58,10 @@ class _FilterDialogState extends State<FilterDialog> {
         contentPadding: const EdgeInsets.only(left: 20, right: 20),
         scrollable: true,
         title: Row(children: [
-          Text(localizations.domainFilter, style: const TextStyle(fontSize: 18)),
-          const Expanded(child: Align(alignment: Alignment.topRight, child: CloseButton()))
+          const Expanded(child: SizedBox()),
+          Text(localizations.domainFilter, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+          const Expanded(child: SizedBox()),
+          Align(alignment: Alignment.topRight, child: CloseButton())
         ]),
         content: SizedBox(
           width: 680,
@@ -266,7 +269,8 @@ class _DomainListState extends State<DomainList> {
   Map<int, bool> selected = {};
 
   AppLocalizations get localizations => AppLocalizations.of(context)!;
-  bool isPress = false;
+  bool isPressed = false;
+  Offset? lastPressPosition;
   bool changed = false;
 
   onChanged() {
@@ -291,8 +295,13 @@ class _DomainListState extends State<DomainList> {
           });
         },
         child: Listener(
-            onPointerUp: (details) => isPress = false,
-            onPointerDown: (details) => isPress = true,
+            onPointerUp: (event) => isPressed = false,
+            onPointerDown: (event) {
+              lastPressPosition = event.localPosition;
+              if (event.buttons == kPrimaryMouseButton) {
+                isPressed = true;
+              }
+            },
             child: Container(
                 padding: const EdgeInsets.only(top: 10),
                 height: 380,
@@ -323,7 +332,7 @@ class _DomainListState extends State<DomainList> {
           //right click menus
           onDoubleTap: () => showEdit(index),
           onHover: (hover) {
-            if (isPress && selected[index] != true) {
+            if (isPressed && selected[index] != true) {
               setState(() {
                 selected[index] = true;
               });
@@ -347,7 +356,7 @@ class _DomainListState extends State<DomainList> {
               color: selected[index] == true
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 38,
               padding: const EdgeInsets.symmetric(vertical: 3),

@@ -208,7 +208,8 @@ class RequestRuleList extends StatefulWidget {
 class _RequestRuleListState extends State<RequestRuleList> {
   Map<int, bool> selected = {};
   late List<RequestRewriteRule> rules;
-  bool isPress = false;
+  bool isPressed = false;
+  Offset? lastPressPosition;
 
   AppLocalizations get localizations => AppLocalizations.of(context)!;
 
@@ -221,7 +222,12 @@ class _RequestRuleListState extends State<RequestRuleList> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onSecondaryTapDown: (details) => showGlobalMenu(details.globalPosition),
+        onSecondaryTap: () {
+          if (lastPressPosition == null) {
+            return;
+          }
+          showGlobalMenu(lastPressPosition!);
+        },
         onTapDown: (details) {
           if (selected.isEmpty) {
             return;
@@ -234,8 +240,13 @@ class _RequestRuleListState extends State<RequestRuleList> {
           });
         },
         child: Listener(
-            onPointerUp: (details) => isPress = false,
-            onPointerDown: (details) => isPress = true,
+            onPointerUp: (event) => isPressed = false,
+            onPointerDown: (event) {
+              lastPressPosition = event.localPosition;
+              if (event.buttons == kPrimaryMouseButton) {
+                isPressed = true;
+              }
+            },
             child: Container(
                 padding: const EdgeInsets.only(top: 10),
                 constraints: const BoxConstraints(maxHeight: 600, minHeight: 550),
@@ -294,7 +305,7 @@ class _RequestRuleListState extends State<RequestRuleList> {
           onSecondaryTapDown: (details) => showMenus(details, index),
           onDoubleTap: () => showEdit(index),
           onHover: (hover) {
-            if (isPress && selected[index] != true) {
+            if (isPressed && selected[index] != true) {
               setState(() {
                 selected[index] = true;
               });
@@ -318,7 +329,7 @@ class _RequestRuleListState extends State<RequestRuleList> {
               color: selected[index] == true
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 30,
               padding: const EdgeInsets.all(5),
@@ -416,9 +427,9 @@ class _RequestRuleListState extends State<RequestRuleList> {
       showGlobalMenu(details.globalPosition);
       return;
     }
-    setState(() {
-      selected[index] = true;
-    });
+    // setState(() {
+    //   selected[index] = true;
+    // });
     showContextMenu(context, details.globalPosition, items: [
       PopupMenuItem(height: 35, child: Text(localizations.edit), onTap: () => showEdit(index)),
       PopupMenuItem(height: 35, onTap: () => export([index]), child: Text(localizations.export)),
@@ -438,9 +449,9 @@ class _RequestRuleListState extends State<RequestRuleList> {
             MultiWindow.invokeRefreshRewrite(Operation.delete, index: index);
           })
     ]).then((value) {
-      setState(() {
-        selected.remove(index);
-      });
+      // setState(() {
+      //   selected.remove(index);
+      // });
     });
   }
 }

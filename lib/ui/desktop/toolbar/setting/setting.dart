@@ -55,6 +55,7 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
+
     return MenuAnchor(
       builder: (context, controller, child) {
         return IconButton(
@@ -71,7 +72,7 @@ class _SettingState extends State<Setting> {
       menuChildren: [
         _ProxyMenu(proxyServer: widget.proxyServer),
         item(localizations.domainFilter, onPressed: hostFilter),
-        item('Hosts', onPressed: hosts),
+        item(localizations.hosts, onPressed: hosts),
         item(localizations.requestBlock, onPressed: showRequestBlock),
         item(localizations.requestRewrite, onPressed: requestRewrite),
         item(localizations.script,

@@ -337,7 +337,7 @@ class _DomainListState extends State<DomainList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 38,
               padding: const EdgeInsets.symmetric(vertical: 3),

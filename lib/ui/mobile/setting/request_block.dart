@@ -76,7 +76,7 @@ class _RequestBlockState extends State<MobileRequestBlock> {
         onLongPress: () => showMenus(index),
         onTap: () => showEdit(index),
         child: Container(
-            color: index.isEven ? Colors.grey.withOpacity(0.1) : null,
+            color: index.isEven ? Colors.grey.withOpacity(0.15) : null,
             height: 38,
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(

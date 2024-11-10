@@ -404,7 +404,7 @@ class _UpdateListState extends State<UpdateList> {
               color: selected == index
                   ? primaryColor
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 30,
               padding: const EdgeInsets.all(5),

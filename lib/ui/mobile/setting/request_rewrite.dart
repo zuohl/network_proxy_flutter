@@ -263,7 +263,7 @@ class _RequestRuleListState extends State<RequestRuleList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.1)
+                      ? Colors.grey.withOpacity(0.15)
                       : null,
               height: 45,
               padding: const EdgeInsets.all(5),

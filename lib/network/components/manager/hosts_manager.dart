@@ -35,8 +35,11 @@ class HostsManager {
   HostsManager._();
 
   /// Singleton
-  static HostsManager get instance {
-    _instance ??= HostsManager._();
+  static Future<HostsManager> get instance async {
+    if (_instance == null) {
+      _instance = HostsManager._();
+      await _instance?.load();
+    }
     return _instance!;
   }
 
@@ -73,8 +76,8 @@ class HostsManager {
       var hostsItem = HostsItem.fromJson(element);
 
       if (hostsItem.parent != null) {
-        var list = _folderMap[hostsItem.parent!] ??= [];
-        list.add(hostsItem);
+        var children = _folderMap[hostsItem.parent!] ??= [];
+        children.add(hostsItem);
         return;
       }
 
@@ -99,14 +102,17 @@ class HostsManager {
     (await configFile).writeAsString(json);
   }
 
+  List<HostsItem> getFolderList(String parent) {
+    return _folderMap[parent] ?? [];
+  }
+
   Future<void> addHosts(HostsItem item) async {
     if (item.parent == null) {
       list.add(item);
     } else {
-      var list = _folderMap[item.parent!] ??= [];
-      list.add(item);
+      var children = _folderMap[item.parent!] ??= [];
+      children.add(item);
     }
-    await flushConfig();
   }
 
   Future<HostsItem?> getHosts(String host) async {
@@ -133,19 +139,39 @@ class HostsManager {
 
     return null;
   }
+
+  removeHosts(Iterable<HostsItem> items) async {
+    if (items.isEmpty) return;
+    for (var item in items) {
+      if (item.parent == null) {
+        list.remove(item);
+        if (item.isFolder) {
+          _folderMap.remove(item.id);
+        }
+      } else {
+        var children = _folderMap[item.parent!] ??= [];
+        children.remove(item);
+      }
+    }
+    flushConfig();
+  }
 }
 
 class HostsItem {
   bool enabled = true;
   bool isFolder = false;
   final String id;
-  final String? parent;
-  final String host;
-  final String mappingAddress;
+  String? parent;
+  String host;
+  String? toAddress;
   RegExp? _hostReg;
 
-  HostsItem(this.enabled, this.host, this.mappingAddress, {String? id, this.isFolder = false, this.parent})
-      : id = id ?? DateTime.now().millisecondsSinceEpoch.toRadixString(36) + RandomUtil.randomString(4);
+  HostsItem({String? id, required this.host, this.toAddress, required this.enabled, this.isFolder = false, this.parent})
+      : id = id ?? generateId();
+
+  static String generateId() {
+    return DateTime.now().millisecondsSinceEpoch.toRadixString(36) + RandomUtil.randomString(4);
+  }
 
   //匹配url
   bool match(String url) {
@@ -156,11 +182,11 @@ class HostsItem {
   factory HostsItem.fromJson(Map<String, dynamic> json) {
     return HostsItem(
       id: json['id'],
+      host: json['host'],
+      toAddress: json['toAddress'],
+      enabled: json['enabled'],
       parent: json['parent'],
       isFolder: json['isFolder'] == true,
-      json['enabled'],
-      json['host'],
-      json['mappingAddress'],
     );
   }
 
@@ -171,7 +197,7 @@ class HostsItem {
       'enabled': enabled,
       'isFolder': isFolder,
       'host': host,
-      'mappingAddress': mappingAddress,
+      'toAddress': toAddress,
     };
   }
 }
