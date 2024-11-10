@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_toastr/flutter_toastr.dart';
+import 'package:proxypin/ui/component/buttons.dart';
 import 'package:proxypin/utils/lang.dart';
 import 'package:proxypin/utils/platform.dart';
 
@@ -32,12 +33,6 @@ class _TimestampPageState extends State<TimestampPage> {
   TextEditingController timestampOut = TextEditingController();
   TextEditingController dateTimeOut = TextEditingController();
 
-  ButtonStyle get buttonStyle => ButtonStyle(
-      padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 15, vertical: 8)),
-      // textStyle: WidgetStateProperty.all<TextStyle>(TextStyle(fontSize: 14)),
-      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))));
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +42,10 @@ class _TimestampPageState extends State<TimestampPage> {
     dateTime.text = DateTime.now().format();
     //定时器
     Timer.periodic(Duration(seconds: 1), (timer) {
-      if (!mounted) timer.cancel();
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
       nowTimestamp.text = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
     });
   }
@@ -144,8 +142,8 @@ class _TimestampPageState extends State<TimestampPage> {
     return SizedBox(
         height: 40,
         child: FilledButton.icon(
-            icon: Icon(Icons.play_arrow_rounded),
-            style: buttonStyle,
+            icon: Icon(Icons.play_arrow_rounded, size: 20),
+            style: Buttons.buttonStyle,
             label: Text(localizations.convert),
             onPressed: () => timestampConvert(timestamp.text)));
   }
@@ -191,8 +189,8 @@ class _TimestampPageState extends State<TimestampPage> {
     return SizedBox(
         height: 40,
         child: FilledButton.icon(
-            icon: Icon(Icons.play_arrow_rounded),
-            style: buttonStyle,
+            icon: Icon(Icons.play_arrow_rounded, size: 20),
+            style: Buttons.buttonStyle,
             label: Text(localizations.convert),
             onPressed: () => timeConvert(dateTime.text)));
   }

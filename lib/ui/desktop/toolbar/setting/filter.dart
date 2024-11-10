@@ -141,22 +141,17 @@ class _DomainFilterState extends State<DomainFilter> {
           Text(localizations.enable),
           const SizedBox(width: 10),
           SwitchWidget(
-              scale: 0.8,
+              scale: 0.75,
               value: widget.hostList.enabled,
               onChanged: (value) {
                 widget.hostList.enabled = value;
                 changed = true;
               }),
           const Expanded(child: SizedBox()),
-          FilledButton.icon(
-              icon: const Icon(Icons.add, size: 14),
-              onPressed: add,
-              label: Text(localizations.add, style: const TextStyle(fontSize: 12))),
-          const SizedBox(width: 10),
-          FilledButton.icon(
-              icon: const Icon(Icons.input_rounded, size: 14),
-              onPressed: import,
-              label: Text(localizations.import, style: const TextStyle(fontSize: 12))),
+          TextButton.icon(icon: const Icon(Icons.add, size: 18), onPressed: add, label: Text(localizations.add)),
+          const SizedBox(width: 5),
+          TextButton.icon(
+              icon: const Icon(Icons.input_rounded, size: 18), onPressed: import, label: Text(localizations.import)),
           const SizedBox(width: 5),
         ]),
         DomainList(widget.hostList, onChange: () => changed = true)
@@ -232,8 +227,9 @@ class DomainAddDialog extends StatelessWidget {
                       onChanged: (val) => host = val)
                 ]))),
         actions: [
+          TextButton(child: Text(localizations.cancel), onPressed: () => Navigator.of(context).pop()),
           TextButton(
-              child: Text(localizations.add),
+              child: Text(localizations.save),
               onPressed: () {
                 if (!(formKey.currentState as FormState).validate()) {
                   return;
@@ -249,7 +245,6 @@ class DomainAddDialog extends StatelessWidget {
                 }
                 Navigator.of(context).pop(host);
               }),
-          TextButton(child: Text(localizations.close), onPressed: () => Navigator.of(context).pop())
         ]);
   }
 }

@@ -17,12 +17,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:proxypin/network/bin/server.dart';
+import 'package:proxypin/network/components/manager/hosts_manager.dart';
 import 'package:proxypin/network/components/manager/request_block_manager.dart';
 import 'package:proxypin/network/components/manager/request_rewrite_manager.dart';
 import 'package:proxypin/storage/histories.dart';
 import 'package:proxypin/ui/component/utils.dart';
 import 'package:proxypin/ui/configuration.dart';
 import 'package:proxypin/ui/mobile/menu/drawer.dart';
+import 'package:proxypin/ui/mobile/setting/hosts.dart';
 import 'package:proxypin/ui/mobile/setting/preference.dart';
 import 'package:proxypin/ui/mobile/mobile.dart';
 import 'package:proxypin/ui/mobile/request/favorite.dart';
@@ -92,6 +94,16 @@ class _MePageState extends State<MePage> {
                 leading: Icon(Icons.filter_alt_outlined, color: color),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () => navigator(context, FilterMenu(proxyServer: proxyServer))),
+            ListTile(
+                title: Text(localizations.hosts),
+                leading: Icon(Icons.domain, color: color),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () async {
+                  var hostsManager = await HostsManager.instance;
+                  if (context.mounted) {
+                    navigator(context, HostsPage(hostsManager: hostsManager));
+                  }
+                }),
             ListTile(
                 title: Text(localizations.requestBlock),
                 leading: Icon(Icons.block_flipped, color: color),

@@ -15,10 +15,8 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,27 +26,32 @@ import 'package:proxypin/network/util/logger.dart';
 import 'package:proxypin/ui/component/utils.dart';
 import 'package:proxypin/ui/component/widgets.dart';
 
-///hosts设置
-///@author Hongen Wang
-class HostsDialog extends StatefulWidget {
+/// Hosts page
+/// @author wanghongen
+class HostsPage extends StatefulWidget {
   final HostsManager hostsManager;
 
-  const HostsDialog({super.key, required this.hostsManager});
+  const HostsPage({super.key, required this.hostsManager});
 
   @override
-  State<HostsDialog> createState() => _HostsDialogState();
+  State<StatefulWidget> createState() => _HostsPageState();
 }
 
-class _HostsDialogState extends State<HostsDialog> {
+class _HostsPageState extends State<HostsPage> {
+  late HostsManager hostsManager = widget.hostsManager;
   Set<HostsItem> selected = {};
   Set<String> offstage = {};
 
-  bool isPressed = false;
-  Offset? lastPressPosition;
+  bool multiple = false;
 
   bool saving = false;
 
   AppLocalizations get localizations => AppLocalizations.of(context)!;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   saveConfig() {
     if (saving) return;
@@ -61,123 +64,72 @@ class _HostsDialogState extends State<HostsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onSecondaryTap: () {
-          if (lastPressPosition == null) {
-            return;
-          }
-          showGlobalMenu(lastPressPosition!);
-        },
-        onTapDown: (details) {
-          if (selected.isEmpty) {
-            return;
-          }
-
-          if (HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) {
-            return;
-          }
-          setState(() {
-            selected.clear();
-          });
-        },
-        child: Listener(
-            onPointerUp: (event) => isPressed = false,
-            onPointerDown: (event) {
-              lastPressPosition = event.localPosition;
-              if (event.buttons == kPrimaryMouseButton) {
-                isPressed = true;
-              }
-            },
-            child: AlertDialog(
-                titlePadding: const EdgeInsets.only(left: 20, top: 10, right: 15),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                scrollable: true,
-                title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  const Expanded(child: SizedBox()),
-                  Text('Hosts', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                  const Expanded(child: SizedBox()),
-                  Align(alignment: Alignment.topRight, child: CloseButton())
+    return Scaffold(
+        appBar: AppBar(centerTitle: true, title: Text('Hosts', style: const TextStyle(fontSize: 16))),
+        persistentFooterButtons: [multiple ? globalMenu() : const SizedBox()],
+        body: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: <Widget>[
+                Row(children: [
+                  Container(width: 15),
+                  Text(localizations.enable),
+                  const SizedBox(width: 10),
+                  SwitchWidget(
+                      scale: 0.8,
+                      value: widget.hostsManager.enabled,
+                      onChanged: (value) {
+                        widget.hostsManager.enabled = value;
+                        saveConfig();
+                      }),
                 ]),
-                content: SizedBox(
-                  width: 550,
-                  height: 500,
-                  child: Column(children: [
-                    Row(children: [
-                      Container(width: 15),
-                      Text(localizations.enable),
-                      const SizedBox(width: 10),
-                      SwitchWidget(
-                          scale: 0.8,
-                          value: widget.hostsManager.enabled,
-                          onChanged: (value) {
-                            widget.hostsManager.enabled = value;
-                            saveConfig();
-                          }),
-                      const Expanded(child: SizedBox()),
-                      TextButton.icon(
-                          icon: const Icon(Icons.add, size: 18),
-                          onPressed: showEdit,
-                          label: Text(localizations.newBuilt)),
-                      const SizedBox(width: 5),
-                      TextButton.icon(
-                          icon: const Icon(Icons.folder_outlined, size: 18),
-                          onPressed: newFolder,
-                          label: Text(localizations.newFolder)),
-                      const SizedBox(width: 5),
-                      TextButton.icon(
-                          icon: const Icon(Icons.input_rounded, size: 18),
-                          onPressed: import,
-                          label: Text(localizations.import)),
-                      const SizedBox(width: 5),
-                    ]),
-                    const SizedBox(height: 8),
-                    Container(
-                        height: 430,
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.2))),
-                        child: Column(children: [
-                          const SizedBox(height: 5),
-                          Row(children: [
-                            Container(width: 15),
-                            SizedBox(
-                                width: 50, child: Text(localizations.enable, style: const TextStyle(fontSize: 14))),
-                            Container(width: 15),
-                            Expanded(child: Text(localizations.domain, style: TextStyle(fontSize: 14))),
-                            Container(width: 15),
-                            Expanded(child: Text(localizations.toAddress, style: const TextStyle(fontSize: 14))),
-                          ]),
-                          const Divider(thickness: 0.5),
-                          Expanded(
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: widget.hostsManager.list.length,
-                                  padding: const EdgeInsets.only(right: 10),
-                                  itemBuilder: (_, index) => row(widget.hostsManager.list[index], index.isEven)))
-                        ])),
+                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  TextButton.icon(
+                      icon: const Icon(Icons.add, size: 18), onPressed: showEdit, label: Text(localizations.newBuilt)),
+                  TextButton.icon(
+                      icon: const Icon(Icons.folder_outlined, size: 18),
+                      onPressed: newFolder,
+                      label: Text(localizations.newFolder)),
+                  TextButton.icon(
+                      icon: const Icon(Icons.input_rounded, size: 18),
+                      onPressed: import,
+                      label: Text(localizations.import)),
+                  SizedBox(width: 3),
+                ]),
+                const SizedBox(height: 8),
+                Expanded(
+                    child: Column(children: [
+                  const SizedBox(height: 5),
+                  Row(children: [
+                    Container(width: 15),
+                    SizedBox(width: 50, child: Text(localizations.enable, style: const TextStyle(fontSize: 14))),
+                    Container(width: 15),
+                    Expanded(child: Text(localizations.domain, style: TextStyle(fontSize: 14))),
+                    Container(width: 15),
+                    Expanded(child: Text(localizations.toAddress, style: const TextStyle(fontSize: 14))),
                   ]),
-                ))));
+                  const Divider(thickness: 0.5),
+                  Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.hostsManager.list.length,
+                          padding: const EdgeInsets.only(right: 10),
+                          itemBuilder: (_, index) => row(widget.hostsManager.list[index], index.isEven)))
+                ])),
+              ],
+            )));
   }
 
   Widget row(HostsItem item, bool isEven, {EdgeInsetsGeometry? padding}) {
     var primaryColor = Theme.of(context).colorScheme.primary;
 
     return Column(children: [
-      InkWell(
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          hoverColor: primaryColor.withOpacity(0.3),
-          onSecondaryTapDown: (details) => showMenus(details, item),
-          onDoubleTap: item.isFolder ? null : () => showEdit(item: item),
+      GestureDetector(
+          onLongPressStart: (details) => showMenus(details, item),
           onTap: () {
-            if (HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) {
+            if (multiple) {
               setState(() {
                 selected.contains(item) ? selected.remove(item) : selected.add(item);
-              });
-              return;
-            }
-
-            if (!isPressed && selected.isNotEmpty) {
-              setState(() {
-                selected.clear();
               });
               return;
             }
@@ -186,22 +138,17 @@ class _HostsDialogState extends State<HostsDialog> {
               setState(() {
                 offstage.contains(item.id) ? offstage.remove(item.id) : offstage.add(item.id);
               });
+              return;
             }
-          },
-          onHover: (hover) {
-            if (isPressed && !selected.contains(item)) {
-              setState(() {
-                selected.add(item);
-              });
-            }
+            showEdit(item: item);
           },
           child: Container(
               color: selected.contains(item)
                   ? primaryColor.withOpacity(0.6)
                   : isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
-              height: 35,
+              height: 42,
               padding: padding ?? const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
@@ -241,41 +188,67 @@ class _HostsDialogState extends State<HostsDialog> {
     showEdit(isFolder: true);
   }
 
-  enableStatus(bool enable) {
-    if (selected.isEmpty) return;
-
-    for (var item in selected) {
-      if (item.enabled == enable) continue;
-      item.enabled = enable;
-    }
-    setState(() {
-      saveConfig();
+  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder = false}) {
+    isFolder ??= item?.isFolder == true;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => isFolder == true
+            ? FolderDialog(hostsManager: widget.hostsManager, folder: item)
+            : HostsEditDialog(item: item, parent: parent)).then((value) {
+      if (value != null) {
+        setState(() {
+          saveConfig();
+        });
+      }
     });
   }
 
-  showGlobalMenu(Offset offset) {
-    showContextMenu(context, offset, items: [
-      PopupMenuItem(height: 35, child: Text(localizations.newBuilt), onTap: () => showEdit()),
-      PopupMenuItem(
-          height: 35, enabled: selected.isNotEmpty, child: Text(localizations.export), onTap: () => export(selected)),
-      const PopupMenuDivider(),
-      PopupMenuItem(height: 35, child: Text(localizations.enableSelect), onTap: () => enableStatus(true)),
-      PopupMenuItem(height: 35, child: Text(localizations.disableSelect), onTap: () => enableStatus(false)),
-      const PopupMenuDivider(),
-      PopupMenuItem(
-          height: 35,
-          enabled: selected.isNotEmpty,
-          child: Text(localizations.deleteSelect),
-          onTap: () => removeHosts(selected)),
+  globalMenu() {
+    return Stack(children: [
+      Container(
+          height: 50,
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.2)))),
+      Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Center(
+              child: TextButton(
+                  onPressed: () {},
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    TextButton.icon(
+                        onPressed: () {
+                          export(selected);
+                          setState(() {
+                            selected.clear();
+                            multiple = false;
+                          });
+                        },
+                        icon: const Icon(Icons.share, size: 18),
+                        label: Text(localizations.export, style: const TextStyle(fontSize: 14))),
+                    TextButton.icon(
+                        onPressed: () => removeHosts(selected),
+                        icon: const Icon(Icons.delete, size: 18),
+                        label: Text(localizations.delete, style: const TextStyle(fontSize: 14))),
+                    TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            multiple = false;
+                            selected.clear();
+                          });
+                        },
+                        icon: const Icon(Icons.cancel, size: 18),
+                        label: Text(localizations.cancel, style: const TextStyle(fontSize: 14))),
+                  ]))))
     ]);
   }
 
   //点击菜单
-  showMenus(TapDownDetails details, HostsItem item) {
-    if (selected.length > 1) {
-      showGlobalMenu(details.globalPosition);
-      return;
-    }
+  showMenus(LongPressStartDetails details, HostsItem item) {
+    //长按反馈
+    HapticFeedback.lightImpact();
 
     setState(() {
       selected.add(item);
@@ -284,6 +257,7 @@ class _HostsDialogState extends State<HostsDialog> {
     showContextMenu(context, details.globalPosition, items: [
       if (item.isFolder)
         PopupMenuItem(height: 35, child: Text(localizations.newBuilt), onTap: () => showEdit(parent: item)),
+      PopupMenuItem(height: 35, child: Text(localizations.multiple), onTap: () => setState(() => multiple = true)),
       PopupMenuItem(height: 35, child: Text(localizations.edit), onTap: () => showEdit(item: item)),
       PopupMenuItem(height: 35, onTap: () => export([item]), child: Text(localizations.export)),
       PopupMenuItem(
@@ -311,27 +285,13 @@ class _HostsDialogState extends State<HostsDialog> {
     });
   }
 
-  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder = false}) {
-    isFolder ??= item?.isFolder == true;
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => isFolder == true
-            ? FolderDialog(hostsManager: widget.hostsManager, folder: item)
-            : HostsEditDialog(item: item, parent: parent)).then((value) {
-      if (value != null) {
-        setState(() {
-          saveConfig();
-        });
-      }
-    });
-  }
-
   //删除
   Future<void> removeHosts(Set<HostsItem> items) async {
     if (items.isEmpty) return;
     return showConfirmDialog(context, onConfirm: () async {
       await widget.hostsManager.removeHosts(items);
       setState(() {
+        multiple = false;
         items.clear();
       });
       if (mounted) FlutterToastr.show(localizations.deleteSuccess, context);
@@ -340,8 +300,7 @@ class _HostsDialogState extends State<HostsDialog> {
 
   //导入
   import() async {
-    final FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowedExtensions: ['json'], type: FileType.custom);
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any);
     var file = result?.files.single;
     if (file == null) {
       return;
@@ -383,18 +342,16 @@ class _HostsDialogState extends State<HostsDialog> {
     if (items.isEmpty) return;
 
     String fileName = 'hosts.json';
-    var path = await FilePicker.platform.saveFile(fileName: fileName);
-    if (path == null) {
-      return;
-    }
-
     var list = [];
     for (var item in items) {
       var json = item.toJson();
       list.add(json);
     }
 
-    await File(path).writeAsBytes(utf8.encode(jsonEncode(list)));
+    var path = await FilePicker.platform.saveFile(fileName: fileName, bytes: utf8.encode(jsonEncode(list)));
+    if (path == null) {
+      return;
+    }
     if (mounted) FlutterToastr.show(localizations.exportSuccess, context);
   }
 }
@@ -423,6 +380,8 @@ class FolderDialog extends StatelessWidget {
           SizedBox(width: 55, child: Text(localizations.name)),
           Expanded(
               child: TextFormField(
+                  minLines: 1,
+                  maxLines: 3,
                   initialValue: name,
                   onChanged: (val) => name = val,
                   decoration: InputDecoration(border: OutlineInputBorder())))
@@ -519,43 +478,39 @@ class _HostsEditDialogState extends State<HostsEditDialog> {
               },
               child: Text(localizations.save)),
         ],
-        content: SizedBox(
-          width: 300,
-          height: 180,
-          child: Form(
-              key: formKey,
-              child: Column(children: [
-                Row(children: [
-                  SizedBox(width: 80, child: Text(localizations.enable)),
-                  Expanded(child: SwitchWidget(scale: 0.8, value: enabled, onChanged: (value) => enabled = value)),
-                ]),
-                const SizedBox(height: 8),
-                Row(children: [
-                  SizedBox(width: 80, child: Text(localizations.domain)),
-                  Expanded(
-                      child: TextFormField(
-                          controller: hostController,
-                          validator: (val) => val == null || val.trim().isEmpty ? localizations.cannotBeEmpty : null,
-                          decoration: const InputDecoration(
-                              hintText: '*.example.com',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              errorStyle: TextStyle(height: 0, fontSize: 0),
-                              border: OutlineInputBorder()))),
-                ]),
-                const SizedBox(height: 10),
-                Row(children: [
-                  SizedBox(width: 80, child: Text(localizations.toAddress)),
-                  Expanded(
-                      child: TextFormField(
-                          controller: toAddressController,
-                          validator: (val) => val == null || val.trim().isEmpty ? localizations.cannotBeEmpty : null,
-                          decoration: const InputDecoration(
-                              hintText: '202.108.22.5',
-                              errorStyle: TextStyle(height: 0, fontSize: 0),
-                              hintStyle: TextStyle(color: Colors.grey),
-                              border: OutlineInputBorder()))),
-                ]),
-              ])),
-        ));
+        content: Form(
+            key: formKey,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Row(children: [
+                SizedBox(width: 80, child: Text(localizations.enable)),
+                Expanded(child: SwitchWidget(scale: 0.8, value: enabled, onChanged: (value) => enabled = value)),
+              ]),
+              const SizedBox(height: 8),
+              Row(children: [
+                SizedBox(width: 80, child: Text(localizations.domain)),
+                Expanded(
+                    child: TextFormField(
+                        controller: hostController,
+                        validator: (val) => val == null || val.trim().isEmpty ? localizations.cannotBeEmpty : null,
+                        decoration: const InputDecoration(
+                            hintText: '*.example.com',
+                            hintStyle: TextStyle(color: Colors.grey),
+                            errorStyle: TextStyle(height: 0, fontSize: 0),
+                            border: OutlineInputBorder()))),
+              ]),
+              const SizedBox(height: 10),
+              Row(children: [
+                SizedBox(width: 80, child: Text(localizations.toAddress)),
+                Expanded(
+                    child: TextFormField(
+                        controller: toAddressController,
+                        validator: (val) => val == null || val.trim().isEmpty ? localizations.cannotBeEmpty : null,
+                        decoration: const InputDecoration(
+                            hintText: '202.108.22.5',
+                            errorStyle: TextStyle(height: 0, fontSize: 0),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder()))),
+              ]),
+            ])));
   }
 }

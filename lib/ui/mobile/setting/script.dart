@@ -88,19 +88,18 @@ class _MobileScriptState extends State<MobileScript> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              const SizedBox(width: 10),
-                              FilledButton.icon(
+                              TextButton.icon(
                                   icon: const Icon(Icons.add, size: 18),
                                   onPressed: scriptEdit,
                                   label: Text(localizations.add)),
-                              const SizedBox(width: 10),
-                              FilledButton.icon(
+                              const SizedBox(width: 5),
+                              TextButton.icon(
                                 icon: const Icon(Icons.input_rounded, size: 18),
                                 onPressed: import,
                                 label: Text(localizations.import),
                               ),
-                              const SizedBox(width: 10),
-                              FilledButton.icon(
+                              const SizedBox(width: 5),
+                              TextButton.icon(
                                 icon: const Icon(Icons.terminal, size: 18),
                                 onPressed: consoleLog,
                                 label: Text(localizations.logger),
@@ -610,7 +609,7 @@ class _ScriptListState extends State<ScriptList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               height: 45,
               padding: const EdgeInsets.all(5),

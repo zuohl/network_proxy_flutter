@@ -395,7 +395,7 @@ class _UpdateListState extends State<UpdateList> {
               color: selected == index
                   ? primaryColor
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               constraints: const BoxConstraints(minHeight: 38, maxHeight: 45),
               padding: const EdgeInsets.all(5),

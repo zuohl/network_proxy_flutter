@@ -174,9 +174,10 @@ class HostsItem {
   }
 
   //匹配url
-  bool match(String url) {
+  bool match(String domain) {
+    if (host != _hostReg?.pattern) _hostReg = null;
     _hostReg ??= RegExp(host.replaceAll("*", ".*"));
-    return _hostReg!.hasMatch(url);
+    return _hostReg!.hasMatch(domain);
   }
 
   factory HostsItem.fromJson(Map<String, dynamic> json) {

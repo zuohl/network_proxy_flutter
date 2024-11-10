@@ -124,16 +124,15 @@ class RequestRewriteState extends State<RequestRewriteWidget> {
                         onPressed: refresh,
                         icon: const Icon(Icons.refresh, color: Colors.blue),
                         tooltip: localizations.refresh),
-                    const SizedBox(width: 30),
-                    FilledButton.icon(
+                    const SizedBox(width: 10),
+                    TextButton.icon(
                       icon: const Icon(Icons.add, size: 18),
-                      label: Text(localizations.add, style: const TextStyle(fontSize: 12)),
+                      label: Text(localizations.add),
                       onPressed: add,
                     ),
-                    const SizedBox(width: 20),
-                    FilledButton.icon(
+                    const SizedBox(width: 5),
+                    TextButton.icon(
                       icon: const Icon(Icons.input_rounded, size: 18),
-                      style: ElevatedButton.styleFrom(padding: const EdgeInsets.only(left: 20, right: 20)),
                       onPressed: import,
                       label: Text(localizations.import),
                     )

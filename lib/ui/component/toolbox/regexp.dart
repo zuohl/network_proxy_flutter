@@ -17,6 +17,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_toastr/flutter_toastr.dart';
+import 'package:proxypin/ui/component/buttons.dart';
 import 'package:proxypin/ui/component/text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -53,12 +54,6 @@ class _RegExpPageState extends State<RegExpPage> {
     replaceText.dispose();
     super.dispose();
   }
-
-  ButtonStyle get buttonStyle => ButtonStyle(
-      padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.symmetric(horizontal: 15, vertical: 8)),
-      textStyle: WidgetStateProperty.all<TextStyle>(TextStyle(fontSize: 14)),
-      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))));
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +138,7 @@ class _RegExpPageState extends State<RegExpPage> {
                     resultInput = input.text;
                   });
                 },
-                style: buttonStyle,
+                style: Buttons.buttonStyle,
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: const Text('Run')),
             const SizedBox(width: 20),

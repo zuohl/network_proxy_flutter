@@ -16,6 +16,7 @@
 
 import 'package:proxypin/network/components/manager/hosts_manager.dart';
 import 'package:proxypin/network/host_port.dart';
+import 'package:proxypin/network/util/logger.dart';
 
 import 'interceptor.dart';
 
@@ -32,6 +33,7 @@ class Hosts extends Interceptor {
     var host = hostAndPort.host;
     var hostsItem = await hostsManager.then((it) => it.getHosts(host));
     if (hostsItem != null) {
+      logger.d('Hosts: $host -> ${hostsItem.toAddress}');
       return hostAndPort.copyWith(host: hostsItem.toAddress);
     }
     return hostAndPort;

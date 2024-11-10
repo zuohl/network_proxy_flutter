@@ -36,10 +36,8 @@ class _RequestBlockState extends State<MobileRequestBlock> {
                       widget.requestBlockManager.flushConfig();
                     }),
                 const Expanded(child: SizedBox()),
-                FilledButton.icon(
-                    icon: const Icon(Icons.add, size: 14),
-                    onPressed: showEdit,
-                    label: Text(localizations.add, style: const TextStyle(fontSize: 14))),
+                TextButton.icon(
+                    icon: const Icon(Icons.add, size: 20), onPressed: showEdit, label: Text(localizations.add)),
                 const SizedBox(width: 5),
               ]),
               const SizedBox(height: 10),
@@ -76,7 +74,7 @@ class _RequestBlockState extends State<MobileRequestBlock> {
         onLongPress: () => showMenus(index),
         onTap: () => showEdit(index),
         child: Container(
-            color: index.isEven ? Colors.grey.withOpacity(0.15) : null,
+            color: index.isEven ? Colors.grey.withOpacity(0.1) : null,
             height: 38,
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
@@ -206,7 +204,8 @@ class RequestBlockAddDialog extends StatelessWidget {
                       onChanged: (val) {}),
                 ]))),
         actions: [
-          FilledButton(
+          TextButton(child: Text(localizations.cancel), onPressed: () => Navigator.of(context).pop()),
+          TextButton(
               child: Text(localizations.save),
               onPressed: () {
                 if (!(formKey.currentState as FormState).validate()) {
@@ -224,7 +223,6 @@ class RequestBlockAddDialog extends StatelessWidget {
                 requestBlockManager.flushConfig();
                 Navigator.of(context).pop(item);
               }),
-          ElevatedButton(child: Text(localizations.close), onPressed: () => Navigator.of(context).pop())
         ]);
   }
 }

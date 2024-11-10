@@ -208,7 +208,7 @@ class HttpProxyChannelHandler extends ChannelHandler<HttpRequest> {
 
     HostAndPort remoteAddress = hostAndPort;
     for (var interceptor in interceptors) {
-      remoteAddress = await interceptor.preConnect(hostAndPort);
+      remoteAddress = await interceptor.preConnect(remoteAddress);
     }
 
     final proxyChannel = await connectRemote(channelContext, clientChannel, remoteAddress);

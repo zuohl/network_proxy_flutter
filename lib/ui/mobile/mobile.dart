@@ -259,8 +259,8 @@ class MobileHomeState extends State<MobileHomePage> implements EventListener, Li
 
     String content = isCN
         ? '提示：默认不会开启HTTPS抓包，请安装证书后再开启HTTPS抓包。\n\n'
-            '1. 请求重写升级UI优化, 请求修改增加匹配数据查看；\n'
-            '2. 请求弹出菜单UI优化, 支持请求高亮；\n'
+            '1. 新增Hosts设置, 支持域名映射；\n'
+            '2. 工具箱新增时间戳转换；\n'
             '3. 脚本内置File Api, 支持文件读取、写入等操作, 详细查看wiki文档；\n'
             "4. 脚本内置MD5方法, md5('xxx')；\n"
             '5. 支持内存自动清理设置, 到内存限制自动清理请求；\n'
@@ -269,8 +269,8 @@ class MobileHomeState extends State<MobileHomePage> implements EventListener, Li
             '8. 修复暗黑模式icon展示不清晰；\n'
         : 'Tips：By default, HTTPS packet capture will not be enabled. Please install the certificate before enabling HTTPS packet capture。\n\n'
             'Click HTTPS Capture packets(Lock icon)，Choose to install the root certificate and follow the prompts to proceed。\n\n'
-            '1. Request to rewrite and upgrade UI optimization, request to modify and add matching data viewing；\n'
-            '2. Request pop-up menu UI optimization, support request highlighting；\n'
+            '1. Added Hosts settings to support domain name mapping；\n'
+            '2. Toolbox adds timestamp conversion；\n'
             '3. The script has built-in File Api, which supports file reading, writing and other operations. For details, please refer to the wiki document；\n'
             "4. The script has built-in MD5 method, md5('xxx')；\n"
             '5. Support memory automatic cleanup settings, memory limit automatic cleanup requests；\n'

@@ -110,7 +110,7 @@ class _ScriptWidgetState extends State<ScriptWidget> {
                                     subtitle: Text(localizations.scriptUseDescribe),
                                     trailing: SwitchWidget(
                                         value: data.enabled,
-                                        scale: 0.9,
+                                        scale: 0.8,
                                         onChanged: (value) {
                                           data.enabled = value;
                                           _refreshScript();
@@ -120,18 +120,18 @@ class _ScriptWidgetState extends State<ScriptWidget> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 const SizedBox(width: 10),
-                                FilledButton.icon(
+                                TextButton.icon(
                                     icon: const Icon(Icons.add, size: 18),
                                     onPressed: scriptAdd,
                                     label: Text(localizations.add)),
                                 const SizedBox(width: 10),
-                                FilledButton.icon(
+                                TextButton.icon(
                                   icon: const Icon(Icons.input_rounded, size: 18),
                                   onPressed: import,
                                   label: Text(localizations.import),
                                 ),
                                 const SizedBox(width: 10),
-                                FilledButton.icon(
+                                TextButton.icon(
                                   icon: const Icon(Icons.terminal, size: 18),
                                   onPressed: consoleLog,
                                   label: Text(localizations.logger),

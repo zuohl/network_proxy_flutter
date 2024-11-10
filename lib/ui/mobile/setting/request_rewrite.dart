@@ -81,15 +81,13 @@ class _MobileRequestRewriteState extends State<MobileRequestRewrite> {
                   ],
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  FilledButton.icon(
-                      icon: const Icon(Icons.add, size: 18), onPressed: add, label: Text(localizations.add)),
-                  const SizedBox(width: 10),
-                  FilledButton.icon(
-                    icon: const Icon(Icons.input_rounded, size: 18),
-                    style: ElevatedButton.styleFrom(padding: const EdgeInsets.only(left: 20, right: 20)),
-                    onPressed: import,
-                    label: Text(localizations.import),
-                  ),
+                  TextButton.icon(
+                      icon: const Icon(Icons.add, size: 20), onPressed: add, label: Text(localizations.add)),
+                  const SizedBox(width: 5),
+                  TextButton.icon(
+                      icon: const Icon(Icons.input_rounded, size: 20),
+                      onPressed: import,
+                      label: Text(localizations.import)),
                 ]),
                 const SizedBox(height: 10),
                 Expanded(child: RequestRuleList(widget.requestRewrites)),
@@ -263,7 +261,7 @@ class _RequestRuleListState extends State<RequestRuleList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               height: 45,
               padding: const EdgeInsets.all(5),

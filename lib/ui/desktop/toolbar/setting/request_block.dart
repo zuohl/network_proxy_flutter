@@ -73,10 +73,8 @@ class _RequestBlockState extends State<RequestBlock> {
                       changed = true;
                     }),
                 const Expanded(child: SizedBox()),
-                FilledButton.icon(
-                    icon: const Icon(Icons.add, size: 14),
-                    onPressed: showEdit,
-                    label: Text(localizations.add, style: const TextStyle(fontSize: 12))),
+                TextButton.icon(
+                    icon: const Icon(Icons.add, size: 18), onPressed: showEdit, label: Text(localizations.add)),
                 const SizedBox(width: 5),
               ]),
               const SizedBox(height: 8),
@@ -221,6 +219,7 @@ class RequestBlockAddDialog extends StatelessWidget {
                       onChanged: (val) {}),
                 ]))),
         actions: [
+          TextButton(child: Text(localizations.close), onPressed: () => Navigator.of(context).pop()),
           TextButton(
               child: Text(localizations.save),
               onPressed: () {
@@ -238,7 +237,6 @@ class RequestBlockAddDialog extends StatelessWidget {
                 }
                 Navigator.of(context).pop(item);
               }),
-          TextButton(child: Text(localizations.close), onPressed: () => Navigator.of(context).pop())
         ]);
   }
 }

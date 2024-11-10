@@ -124,10 +124,10 @@ class _DomainFilterState extends State<DomainFilter> {
                   });
             }),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          FilledButton.icon(icon: const Icon(Icons.add), onPressed: add, label: Text(localizations.add)),
+          TextButton.icon(icon: const Icon(Icons.add, size: 20), onPressed: add, label: Text(localizations.add)),
           const SizedBox(width: 10),
-          FilledButton.icon(
-              icon: const Icon(Icons.input_rounded), onPressed: import, label: Text(localizations.import)),
+          TextButton.icon(
+              icon: const Icon(Icons.input_rounded, size: 20), onPressed: import, label: Text(localizations.import)),
           const SizedBox(width: 5),
         ]),
         Expanded(child: DomainList(widget.hostList, onChange: () => changed = true))
@@ -200,7 +200,8 @@ class DomainAddDialog extends StatelessWidget {
                       onChanged: (val) => host = val)
                 ]))),
         actions: [
-          FilledButton(
+          TextButton(child: Text(localizations.cancel), onPressed: () => Navigator.of(context).pop()),
+          TextButton(
               child: Text(localizations.save),
               onPressed: () {
                 if (!(formKey.currentState as FormState).validate()) {
@@ -217,7 +218,6 @@ class DomainAddDialog extends StatelessWidget {
                 }
                 Navigator.of(context).pop(host);
               }),
-          ElevatedButton(child: Text(localizations.close), onPressed: () => Navigator.of(context).pop())
         ]);
   }
 }
@@ -337,7 +337,7 @@ class _DomainListState extends State<DomainList> {
               color: selected.contains(index)
                   ? primaryColor.withOpacity(0.8)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               height: 38,
               padding: const EdgeInsets.symmetric(vertical: 3),
