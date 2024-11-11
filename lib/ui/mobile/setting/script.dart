@@ -630,7 +630,7 @@ class _ScriptListState extends State<ScriptList> {
                                 _refreshScript();
                               }))),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(list[index].url, style: const TextStyle(fontSize: 13))),
+                  Expanded(child: Text(list[index].url.fixAutoLines(), style: const TextStyle(fontSize: 13))),
                 ],
               )));
     });

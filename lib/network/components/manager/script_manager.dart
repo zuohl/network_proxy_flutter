@@ -26,6 +26,7 @@ import 'package:proxypin/network/http/http_headers.dart';
 import 'package:proxypin/network/util/lang.dart';
 import 'package:proxypin/network/util/logger.dart';
 import 'package:proxypin/network/util/random.dart';
+import 'package:proxypin/network/util/uri.dart';
 import 'package:proxypin/ui/component/device.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -349,13 +350,9 @@ async function onResponse(context, request, response) {
   HttpRequest convertHttpRequest(HttpRequest request, Map<dynamic, dynamic> map) {
     request.headers.clear();
     request.method = HttpMethod.values.firstWhere((element) => element.name == map['method']);
-    String query = '';
-    map['queries']?.forEach((key, value) {
-      query += '$key=$value&';
-    });
+    String query = UriUtils.mapToQuery(map['queries']);
 
-    var requestUri = request.requestUri!
-        .replace(path: map['path'], query: query.isEmpty ? null : query.substring(0, query.length - 1));
+    var requestUri = request.requestUri!.replace(path: map['path'], query: query);
     if (requestUri.isScheme('https')) {
       request.uri = requestUri.path + (requestUri.hasQuery ? '?${requestUri.query}' : '');
     } else {
