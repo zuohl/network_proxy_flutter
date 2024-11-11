@@ -199,7 +199,7 @@ class _HostsDialogState extends State<HostsDialog> {
               color: selected.contains(item)
                   ? primaryColor.withOpacity(0.6)
                   : isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               height: 35,
               padding: padding ?? const EdgeInsets.symmetric(vertical: 3),
@@ -311,7 +311,7 @@ class _HostsDialogState extends State<HostsDialog> {
     });
   }
 
-  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder = false}) {
+  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder}) {
     isFolder ??= item?.isFolder == true;
     showDialog(
         context: context,

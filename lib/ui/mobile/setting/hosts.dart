@@ -188,7 +188,7 @@ class _HostsPageState extends State<HostsPage> {
     showEdit(isFolder: true);
   }
 
-  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder = false}) {
+  showEdit({HostsItem? item, HostsItem? parent, bool? isFolder}) {
     isFolder ??= item?.isFolder == true;
     showDialog(
         context: context,

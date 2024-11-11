@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,6 +49,10 @@ class _TimestampPageState extends State<TimestampPage> {
       }
       nowTimestamp.text = (DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
     });
+
+    if (Platforms.isDesktop() && widget.windowId != null) {
+      HardwareKeyboard.instance.addHandler(onKeyEvent);
+    }
   }
 
   @override
@@ -57,7 +62,20 @@ class _TimestampPageState extends State<TimestampPage> {
     dateTime.dispose();
     timestampOut.dispose();
     dateTimeOut.dispose();
+    HardwareKeyboard.instance.removeHandler(onKeyEvent);
     super.dispose();
+  }
+
+  bool onKeyEvent(KeyEvent event) {
+    if (widget.windowId == null) return false;
+    if ((HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) &&
+        event.logicalKey == LogicalKeyboardKey.keyW) {
+      HardwareKeyboard.instance.removeHandler(onKeyEvent);
+      WindowController.fromWindowId(widget.windowId!).close();
+      return true;
+    }
+
+    return false;
   }
 
   TextStyle? get textStyle => Theme.of(context).textTheme.titleMedium;
@@ -89,9 +107,9 @@ class _TimestampPageState extends State<TimestampPage> {
           if (Platforms.isDesktop())
             Wrap(spacing: 10.0, runSpacing: 10.0, crossAxisAlignment: WrapCrossAlignment.center, children: [
               timestampLabel(),
-              SizedBox(width: 210, child: timestampField()),
+              SizedBox(width: 220, child: timestampField()),
               timestampButton(),
-              SizedBox(width: 200, child: timestampOutField()),
+              SizedBox(width: 210, child: timestampOutField()),
             ]),
           if (Platforms.isMobile())
             Row(children: [
@@ -112,9 +130,9 @@ class _TimestampPageState extends State<TimestampPage> {
           if (Platforms.isDesktop())
             Wrap(spacing: 10.0, runSpacing: 10.0, crossAxisAlignment: WrapCrossAlignment.center, children: [
               timeLabel(),
-              SizedBox(width: 210, child: timeField()),
+              SizedBox(width: 220, child: timeField()),
               timeButton(),
-              SizedBox(width: 200, child: timeOutField())
+              SizedBox(width: 210, child: timeOutField())
             ]),
           if (Platforms.isMobile())
             Row(children: [

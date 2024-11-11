@@ -15,20 +15,24 @@
  */
 
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_toastr/flutter_toastr.dart';
 import 'package:proxypin/network/util/cert/x509.dart';
 import 'package:proxypin/ui/component/buttons.dart';
 import 'package:proxypin/ui/component/text_field.dart';
+import 'package:proxypin/utils/platform.dart';
 
 ///证书哈希名称查看
 ///@author Hongen Wang
 class CertHashPage extends StatefulWidget {
-  const CertHashPage({super.key});
+  final int? windowId;
+
+  const CertHashPage({super.key, this.windowId});
 
   @override
   State<StatefulWidget> createState() {
@@ -43,10 +47,31 @@ class _CertHashPageState extends State<CertHashPage> {
   AppLocalizations get localizations => AppLocalizations.of(context)!;
 
   @override
+  void initState() {
+    super.initState();
+    if (Platforms.isDesktop() && widget.windowId != null) {
+      HardwareKeyboard.instance.addHandler(onKeyEvent);
+    }
+  }
+
+  @override
   void dispose() {
     input.dispose();
     decodeData.dispose();
+    HardwareKeyboard.instance.removeHandler(onKeyEvent);
     super.dispose();
+  }
+
+  bool onKeyEvent(KeyEvent event) {
+    if (widget.windowId == null) return false;
+    if ((HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) &&
+        event.logicalKey == LogicalKeyboardKey.keyW) {
+      HardwareKeyboard.instance.removeHandler(onKeyEvent);
+      WindowController.fromWindowId(widget.windowId!).close();
+      return true;
+    }
+
+    return false;
   }
 
   @override
@@ -99,7 +124,8 @@ class _CertHashPageState extends State<CertHashPage> {
                   decoration: decoration(context, label: localizations.inputContent))),
           Align(
               alignment: Alignment.bottomLeft,
-              child: TextButton(onPressed: () {}, child:  Text("${localizations.output}:", style: TextStyle(fontSize: 16)))),
+              child: TextButton(
+                  onPressed: () {}, child: Text("${localizations.output}:", style: TextStyle(fontSize: 16)))),
           Container(
               width: double.infinity,
               padding: const EdgeInsets.all(10),
@@ -139,6 +165,4 @@ class _CertHashPageState extends State<CertHashPage> {
       return null;
     }
   }
-
-
 }

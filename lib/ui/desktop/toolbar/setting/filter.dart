@@ -349,9 +349,9 @@ class _DomainListState extends State<DomainList> {
           },
           child: Container(
               color: selected[index] == true
-                  ? primaryColor.withOpacity(0.8)
+                  ? primaryColor.withOpacity(0.6)
                   : index.isEven
-                      ? Colors.grey.withOpacity(0.15)
+                      ? Colors.grey.withOpacity(0.1)
                       : null,
               height: 38,
               padding: const EdgeInsets.symmetric(vertical: 3),

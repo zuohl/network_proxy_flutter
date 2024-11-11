@@ -226,7 +226,7 @@
   "shareCurl": "Share cURL Request",
   "shareRequestResponse": "Share Request and Response",
   "captureDetail": "Capture Detail",
-  "proxyPinSoftware": "ProxyPin Full platform packet capture software",
+  "proxyPinSoftware": "ProxyPin Open source traffic capture software for all platforms",
 
   "prompt": "Prompt",
   "curlSchemeRequest": "If the curl format is recognized, should it be converted into an HTTP request?",

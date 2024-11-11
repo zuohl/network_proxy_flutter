@@ -110,7 +110,7 @@ class _RequestBlockState extends State<RequestBlock> {
         onSecondaryTapDown: (details) => showMenus(details, index),
         onDoubleTap: () => showEdit(index),
         child: Container(
-            color: index.isEven ? Colors.grey.withOpacity(0.15) : null,
+            color: index.isEven ? Colors.grey.withOpacity(0.10) : null,
             height: 36,
             padding: const EdgeInsets.symmetric(vertical: 3),
             child: Row(

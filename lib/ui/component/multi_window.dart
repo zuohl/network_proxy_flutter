@@ -85,7 +85,7 @@ Widget multiWindow(int windowId, Map<dynamic, dynamic> argument) {
   }
 
   if (argument['name'] == 'CertHashPage') {
-    return CertHashPage();
+    return CertHashPage(windowId: windowId);
   }
 
   if (argument['name'] == 'JavaScript') {
@@ -93,7 +93,7 @@ Widget multiWindow(int windowId, Map<dynamic, dynamic> argument) {
   }
 
   if (argument['name'] == 'RegExpPage') {
-    return const RegExpPage();
+    return RegExpPage(windowId: windowId);
   }
   if (argument['name'] == 'TimestampPage') {
     return TimestampPage(windowId: windowId);

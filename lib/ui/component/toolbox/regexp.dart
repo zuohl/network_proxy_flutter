@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_toastr/flutter_toastr.dart';
 import 'package:proxypin/ui/component/buttons.dart';
 import 'package:proxypin/ui/component/text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:proxypin/utils/platform.dart';
 
 ///正则表达式工具
 ///@author Hongen Wang
 class RegExpPage extends StatefulWidget {
-  const RegExpPage({super.key});
+  final int? windowId;
+
+  const RegExpPage({super.key, this.windowId});
 
   @override
   State<StatefulWidget> createState() {
@@ -45,6 +49,10 @@ class _RegExpPageState extends State<RegExpPage> {
     super.initState();
     pattern.addListener(onInputChangeMatch);
     input.addListener(onInputChangeMatch);
+
+    if (Platforms.isDesktop() && widget.windowId != null) {
+      HardwareKeyboard.instance.addHandler(onKeyEvent);
+    }
   }
 
   @override
@@ -52,7 +60,20 @@ class _RegExpPageState extends State<RegExpPage> {
     pattern.dispose();
     input.dispose();
     replaceText.dispose();
+    HardwareKeyboard.instance.removeHandler(onKeyEvent);
     super.dispose();
+  }
+
+  bool onKeyEvent(KeyEvent event) {
+    if (widget.windowId == null) return false;
+    if ((HardwareKeyboard.instance.isMetaPressed || HardwareKeyboard.instance.isControlPressed) &&
+        event.logicalKey == LogicalKeyboardKey.keyW) {
+      HardwareKeyboard.instance.removeHandler(onKeyEvent);
+      WindowController.fromWindowId(widget.windowId!).close();
+      return true;
+    }
+
+    return false;
   }
 
   @override
