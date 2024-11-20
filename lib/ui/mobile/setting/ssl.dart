@@ -228,7 +228,6 @@ class _MobileSslState extends State<MobileSslWidget> {
     CertificateManager.cleanCache();
     await widget.proxyServer.retryBind();
     var urlStr = Uri.parse("http://127.0.0.1:${widget.proxyServer.port}/ssl").toString();
-    print(urlStr);
     Clipboard.setData(ClipboardData(text: urlStr)).then((_) {
       if (!mounted) {
         return;
