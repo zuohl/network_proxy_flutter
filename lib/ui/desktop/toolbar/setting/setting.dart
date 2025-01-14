@@ -23,6 +23,7 @@ import 'package:proxypin/network/components/manager/hosts_manager.dart';
 import 'package:proxypin/network/components/manager/request_block_manager.dart';
 import 'package:proxypin/network/util/system_proxy.dart';
 import 'package:proxypin/ui/component/multi_window.dart';
+import 'package:proxypin/ui/component/widgets.dart';
 import 'package:proxypin/ui/desktop/toolbar/setting/external_proxy.dart';
 import 'package:proxypin/ui/desktop/toolbar/setting/hosts.dart';
 import 'package:proxypin/ui/desktop/toolbar/setting/request_block.dart';
@@ -180,6 +181,21 @@ class _ProxyMenuState extends State<_ProxyMenu> {
         const Divider(thickness: 0.3, height: 8),
         setSystemProxy(),
         const Divider(thickness: 0.3, height: 8),
+        Row(children: [
+          Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text("SOCKS5", style: const TextStyle(fontSize: 14)))),
+          SwitchWidget(
+              value: configuration.enableSocks5,
+              scale: 0.75,
+              onChanged: (val) {
+                configuration.enableSocks5 = val;
+                changed = true;
+              }),
+          SizedBox(width: 10)
+        ]),
+        const Divider(thickness: 0.3, height: 8),
         const SizedBox(height: 3),
         Padding(
             padding: const EdgeInsets.only(left: 15),
@@ -225,22 +241,23 @@ class _ProxyMenuState extends State<_ProxyMenu> {
   ///设置系统代理
   Widget setSystemProxy() {
     return Row(children: [
-      Padding(
-          padding: const EdgeInsets.only(left: 15),
-          child: Text(localizations.systemProxy, style: const TextStyle(fontSize: 14))),
       Expanded(
-          child: Transform.scale(
-              scale: 0.8,
-              child: Switch(
-                  hoverColor: Colors.transparent,
-                  value: configuration.enableSystemProxy,
-                  onChanged: (val) {
-                    widget.proxyServer.setSystemProxyEnable(val);
-                    configuration.enableSystemProxy = val;
-                    setState(() {
-                      changed = true;
-                    });
-                  })))
+          child: Padding(
+              padding: const EdgeInsets.only(left: 15, right: 20),
+              child: Text(localizations.systemProxy, style: const TextStyle(fontSize: 14)))),
+      Transform.scale(
+          scale: 0.75,
+          child: Switch(
+              hoverColor: Colors.transparent,
+              value: configuration.enableSystemProxy,
+              onChanged: (val) {
+                widget.proxyServer.setSystemProxyEnable(val);
+                configuration.enableSystemProxy = val;
+                setState(() {
+                  changed = true;
+                });
+              })),
+      SizedBox(width: 10)
     ]);
   }
 }
