@@ -41,7 +41,7 @@ class About extends StatelessWidget {
             const SizedBox(height: 10),
             const Text("V1.1.6"),
             ListTile(
-                title: const Text("Github"),
+                title: const Text("GitHub"),
                 trailing: const Icon(Icons.arrow_right),
                 onTap: () {
                   launchUrl(Uri.parse(gitHub), mode: LaunchMode.externalApplication);
@@ -50,7 +50,7 @@ class About extends StatelessWidget {
                 title: Text(localizations.feedback),
                 trailing: const Icon(Icons.arrow_right),
                 onTap: () {
-                  launchUrl(Uri.parse("{$gitHub}/issues"), mode: LaunchMode.externalApplication);
+                  launchUrl(Uri.parse("$gitHub/issues"), mode: LaunchMode.externalApplication);
                 }),
             ListTile(
                 title: Text(isCN ? "下载地址" : "Download"),

@@ -97,7 +97,7 @@ class SocksServerHandler extends ChannelHandler<Uint8List> {
       final int port = msg[idx++] << 8 | msg[idx++];
       final proxyInfo = ProxyInfo.of(host, port);
 
-      logger.d('Socks5 connect ${proxyInfo.host}:${proxyInfo.port}');
+      logger.d('[${channel.id}] Socks5 connect ${proxyInfo.host}:${proxyInfo.port}');
       channelContext.putAttribute(AttributeKeys.socks5Proxy, proxyInfo);
 
       final out = encodeCommandResponse(Socks5.repSuccess, bndAddrType: Socks5.repSocks5ServerAtypIpv4);

@@ -22,7 +22,7 @@ import 'package:proxypin/network/bin/configuration.dart';
 import 'package:proxypin/network/channel.dart';
 import 'package:proxypin/network/components/host_filter.dart';
 import 'package:proxypin/network/handler.dart';
-import 'package:proxypin/network/socksx/socks5.dart';
+import 'package:proxypin/network/socks/socks5.dart';
 import 'package:proxypin/network/util/attribute_keys.dart';
 import 'package:proxypin/network/util/crts.dart';
 import 'package:proxypin/network/util/logger.dart';
