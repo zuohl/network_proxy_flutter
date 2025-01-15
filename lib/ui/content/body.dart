@@ -140,6 +140,7 @@ class HttpBodyState extends State<HttpBodyWidget> {
             ? ListView(children: list)
             : Column(crossAxisAlignment: CrossAxisAlignment.start, children: list));
 
+    //在新窗口打开
     if (widget.inNewWindow) {
       return Scaffold(
           appBar: AppBar(title: titleWidget(inNewWindow: true), toolbarHeight: Platform.isWindows ? 36 : null),
@@ -197,10 +198,7 @@ class HttpBodyState extends State<HttpBodyWidget> {
           icon: const Icon(Icons.open_in_new, size: 18), tooltip: localizations.newWindow, onPressed: () => openNew()));
     }
 
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: list,
-    );
+    return Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: list);
   }
 
   //展示请求重写
