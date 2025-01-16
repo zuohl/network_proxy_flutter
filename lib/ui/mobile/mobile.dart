@@ -239,6 +239,7 @@ class MobileHomeState extends State<MobileHomePage> implements EventListener, Li
           context,
           PageRouteBuilder(
               transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
               pageBuilder: (context, animation, secondaryAnimation) {
                 return PictureInPictureWindow(MobileApp.container);
               }));
