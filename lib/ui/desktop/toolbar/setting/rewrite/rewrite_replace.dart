@@ -199,7 +199,7 @@ class RewriteReplaceState extends State<DesktopRewriteReplace> {
               });
             },
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 15),
           Text(localizations.enable),
           const SizedBox(width: 10),
           SwitchWidget(
