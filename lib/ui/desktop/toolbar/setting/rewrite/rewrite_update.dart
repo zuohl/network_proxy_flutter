@@ -229,9 +229,8 @@ class _RewriteUpdateAddState extends State<RewriteUpdateAddDialog> {
                         child: Text(localizations.testData, style: const TextStyle(fontSize: 14))),
                     const SizedBox(width: 10),
                     if (!isMatch)
-                      Expanded(
-                          child:
-                              Text(localizations.noChangesDetected, style: TextStyle(color: Colors.red, fontSize: 14))),
+                      Text(localizations.noChangesDetected, style: TextStyle(color: Colors.red, fontSize: 14)),
+                    Expanded(child: SizedBox()),
                     IconButton(
                       tooltip: 'JSON Format',
                       icon: Icon(Icons.data_object,
