@@ -33,6 +33,8 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
   Queue<HttpRequest> view = Queue();
   bool changing = false;
 
+  bool sortDesc = true;
+
   //搜索的内容
   SearchModel? searchModel;
 
@@ -65,7 +67,12 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
       return;
     }
 
-    view.addFirst(request);
+    if (sortDesc) {
+      view.addFirst(request);
+    } else {
+      view.addLast(request);
+    }
+
     changeState();
   }
 
@@ -163,5 +170,17 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
   scrollToTop() {
     PrimaryScrollController.maybeOf(context)
         ?.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
+
+  ///排序
+  sort(bool desc) {
+    if (sortDesc == desc) {
+      return;
+    }
+
+    sortDesc = desc;
+    setState(() {
+      view = Queue.of(view.toList().reversed);
+    });
   }
 }
