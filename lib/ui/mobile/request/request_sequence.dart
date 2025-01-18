@@ -14,10 +14,11 @@ class RequestSequence extends StatefulWidget {
   final ListenableList<HttpRequest> container;
   final ProxyServer proxyServer;
   final bool displayDomain;
+  final bool? sortDesc;
   final Function(List<HttpRequest>)? onRemove;
 
   const RequestSequence(
-      {super.key, required this.container, required this.proxyServer, this.displayDomain = true, this.onRemove});
+      {super.key, required this.container, required this.proxyServer, this.displayDomain = true, this.onRemove, this.sortDesc});
 
   @override
   State<StatefulWidget> createState() {
@@ -44,6 +45,7 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
   @override
   initState() {
     super.initState();
+    sortDesc = widget.sortDesc ?? true;
     view.addAll(widget.container.source.reversed);
     highlightListener = () {
       //回调时机在高亮设置页面dispose之后。所以需要在下一帧刷新，否则会报错
@@ -153,7 +155,7 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
             itemCount: view.length,
             itemBuilder: (context, index) {
               return RequestRow(
-                  index: view.length - index,
+                  index: sortDesc ? view.length - index : index,
                   key: indexes[view.elementAt(index).requestId] ??= GlobalKey(),
                   request: view.elementAt(index),
                   proxyServer: widget.proxyServer,

@@ -141,7 +141,7 @@ class DesktopRequestListState extends State<DesktopRequestListWidget> with Autom
                 },
                 child: IconText(
                     icon: const Icon(Icons.sort, size: 16),
-                    text: sortDesc ? localizations.timeDesc : localizations.timeAsc,
+                    text: sortDesc ? localizations.timeAsc : localizations.timeDesc,
                     textStyle: const TextStyle(fontSize: 13))),
           ];
         });

@@ -105,7 +105,7 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
           return RequestWidget(
             key: ValueKey(view.elementAt(index).requestId),
             view.elementAt(index),
-            index: view.length - index,
+            index: sortDesc ? view.length - index : index,
             trailing: appIcon(view.elementAt(index)),
             proxyServer: widget.proxyServer,
             displayDomain: widget.displayDomain,
@@ -202,7 +202,7 @@ class RequestSequenceState extends State<RequestSequence> with AutomaticKeepAliv
   sort(bool desc) {
     sortDesc = desc;
     setState(() {
-        view = Queue.of(view.toList().reversed);
+      view = Queue.of(view.toList().reversed);
     });
   }
 }
